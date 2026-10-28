@@ -25,13 +25,13 @@
 
 ## Stack
 
-| | |
-|---|---|
-| Backend | Laravel 13 · PHP 8.4 · MySQL 8 |
-| Frontend | Inertia 3 · Vue 3 (TypeScript) · Tailwind CSS 4 · shadcn-vue (reka-ui) |
-| Auth | Fortify (email, 2FA, passkeys) · Socialite (Google) · Sanctum (tokens de API) |
-| Rutas tipadas | Wayfinder |
-| Tests | Pest / PHPUnit |
+|               |                                                                               |
+| ------------- | ----------------------------------------------------------------------------- |
+| Backend       | Laravel 13 · PHP 8.4 · MySQL 8                                                |
+| Frontend      | Inertia 3 · Vue 3 (TypeScript) · Tailwind CSS 4 · shadcn-vue (reka-ui)        |
+| Auth          | Fortify (email, 2FA, passkeys) · Socialite (Google) · Sanctum (tokens de API) |
+| Rutas tipadas | Wayfinder                                                                     |
+| Tests         | Pest / PHPUnit                                                                |
 
 ## Cómo funciona por dentro
 
@@ -47,16 +47,16 @@ zep.com.ar/{code}  →  RedirectController  →  302 al destino  (+ registro del
 - **Un link borrado no libera su código**, para que un link viejo que alguien tenga guardado nunca lleve a otro destino.
 - **Los clics no guardan la IP en claro**: guardan un hash con sal, que alcanza para contar visitantes únicos.
 
-| Pieza | Archivo |
-|---|---|
-| Generador de códigos | [`app/Services/ShortCodeGenerator.php`](app/Services/ShortCodeGenerator.php) |
+| Pieza                     | Archivo                                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Generador de códigos      | [`app/Services/ShortCodeGenerator.php`](app/Services/ShortCodeGenerator.php)                                                        |
 | Crear un link (web y API) | [`app/Actions/CreateShortLink.php`](app/Actions/CreateShortLink.php) + [`StoreLinkRequest`](app/Http/Requests/StoreLinkRequest.php) |
-| Redirección y clics | [`RedirectController`](app/Http/Controllers/RedirectController.php) + [`ClickRecorder`](app/Services/ClickRecorder.php) |
-| Estadísticas | [`app/Services/LinkStats.php`](app/Services/LinkStats.php) |
-| Aprobación de cuentas | [`EnsureUserIsApproved`](app/Http/Middleware/EnsureUserIsApproved.php), [`OnboardNewUser`](app/Actions/OnboardNewUser.php) |
-| Login con Google | [`GoogleController`](app/Http/Controllers/Auth/GoogleController.php) |
-| Términos y privacidad | [`resources/legal/`](resources/legal) + [`EnsureTermsAccepted`](app/Http/Middleware/EnsureTermsAccepted.php) |
-| API v1 | [`routes/api.php`](routes/api.php) + [`Api/V1/LinkController`](app/Http/Controllers/Api/V1/LinkController.php) |
+| Redirección y clics       | [`RedirectController`](app/Http/Controllers/RedirectController.php) + [`ClickRecorder`](app/Services/ClickRecorder.php)             |
+| Estadísticas              | [`app/Services/LinkStats.php`](app/Services/LinkStats.php)                                                                          |
+| Aprobación de cuentas     | [`EnsureUserIsApproved`](app/Http/Middleware/EnsureUserIsApproved.php), [`OnboardNewUser`](app/Actions/OnboardNewUser.php)          |
+| Login con Google          | [`GoogleController`](app/Http/Controllers/Auth/GoogleController.php)                                                                |
+| Términos y privacidad     | [`resources/legal/`](resources/legal) + [`EnsureTermsAccepted`](app/Http/Middleware/EnsureTermsAccepted.php)                        |
+| API v1                    | [`routes/api.php`](routes/api.php) + [`Api/V1/LinkController`](app/Http/Controllers/Api/V1/LinkController.php)                      |
 
 ## API
 
@@ -67,14 +67,14 @@ Authorization: Bearer TU_TOKEN
 Accept: application/json
 ```
 
-| Método | Ruta | Permiso | Descripción |
-|---|---|---|---|
-| `POST` | `/api/v1/links` | `links:write` | Crear: `{ url, alias?, expires_at? }`. Devuelve `201`, o `200` si ya habías acortado esa URL |
-| `GET` | `/api/v1/links` | `links:read` | Listar (paginado; `?search=`, `?per_page=`) |
-| `GET` | `/api/v1/links/{code}` | `links:read` | Detalle |
-| `PATCH` | `/api/v1/links/{code}` | `links:write` | Cambiar `url`, `is_active` o `expires_at` |
-| `DELETE` | `/api/v1/links/{code}` | `links:write` | Eliminar (`204`) |
-| `GET` | `/api/v1/links/{code}/stats` | `links:read` | Estadísticas (`?from=&to=` en formato `YYYY-MM-DD`) |
+| Método   | Ruta                         | Permiso       | Descripción                                                                                  |
+| -------- | ---------------------------- | ------------- | -------------------------------------------------------------------------------------------- |
+| `POST`   | `/api/v1/links`              | `links:write` | Crear: `{ url, alias?, expires_at? }`. Devuelve `201`, o `200` si ya habías acortado esa URL |
+| `GET`    | `/api/v1/links`              | `links:read`  | Listar (paginado; `?search=`, `?per_page=`)                                                  |
+| `GET`    | `/api/v1/links/{code}`       | `links:read`  | Detalle                                                                                      |
+| `PATCH`  | `/api/v1/links/{code}`       | `links:write` | Cambiar `url`, `is_active` o `expires_at`                                                    |
+| `DELETE` | `/api/v1/links/{code}`       | `links:write` | Eliminar (`204`)                                                                             |
+| `GET`    | `/api/v1/links/{code}/stats` | `links:read`  | Estadísticas (`?from=&to=` en formato `YYYY-MM-DD`)                                          |
 
 Límite: 60 pedidos por minuto por token. Los errores de validación vuelven con `422`.
 
@@ -95,19 +95,19 @@ $short = Http::withToken(config('services.zep.token'))
 
 ```json
 {
-  "data": {
-    "code": "aB3",
-    "short_url": "https://zep.com.ar/aB3",
-    "original_url": "https://una-url-muy-larga.com/con/muchos/segmentos",
-    "is_custom": false,
-    "is_active": true,
-    "is_expired": false,
-    "expires_at": null,
-    "clicks": 0,
-    "last_clicked_at": null,
-    "created_at": "2026-10-27T21:30:00-03:00",
-    "updated_at": "2026-10-27T21:30:00-03:00"
-  }
+    "data": {
+        "code": "aB3",
+        "short_url": "https://zep.com.ar/aB3",
+        "original_url": "https://una-url-muy-larga.com/con/muchos/segmentos",
+        "is_custom": false,
+        "is_active": true,
+        "is_expired": false,
+        "expires_at": null,
+        "clicks": 0,
+        "last_clicked_at": null,
+        "created_at": "2026-10-27T21:30:00-03:00",
+        "updated_at": "2026-10-27T21:30:00-03:00"
+    }
 }
 ```
 
@@ -131,13 +131,13 @@ Con Laragon queda en `http://zep.test`. El usuario del seeder es el de `ADMIN_EM
 
 ### Variables de entorno propias
 
-| Variable | Para qué |
-|---|---|
-| `SHORT_DOMAIN` | Dominio de los links cortos (`zep.com.ar`; en local, `zep.test`) |
-| `ADMIN_EMAIL` | La cuenta con este email entra aprobada y como admin, y recibe los avisos de registro |
-| `SHORT_CODE_MIN_LENGTH` | Largo inicial de los códigos (por defecto, 3) |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` | Login con Google |
-| `LEGAL_CONTACT_EMAIL` | Contacto que figura en los términos y la privacidad |
+| Variable                                                          | Para qué                                                                              |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `SHORT_DOMAIN`                                                    | Dominio de los links cortos (`zep.com.ar`; en local, `zep.test`)                      |
+| `ADMIN_EMAIL`                                                     | La cuenta con este email entra aprobada y como admin, y recibe los avisos de registro |
+| `SHORT_CODE_MIN_LENGTH`                                           | Largo inicial de los códigos (por defecto, 3)                                         |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI` | Login con Google                                                                      |
+| `LEGAL_CONTACT_EMAIL`                                             | Contacto que figura en los términos y la privacidad                                   |
 
 ### Google OAuth
 

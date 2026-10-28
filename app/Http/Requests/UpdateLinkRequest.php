@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Concerns\NormalizesUrl;
+use App\Http\Requests\Concerns\NormalizesInput;
 use App\Models\Link;
 use App\Rules\AllowedDestination;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class UpdateLinkRequest extends FormRequest
 {
-    use NormalizesUrl;
+    use NormalizesInput;
 
     public function authorize(): bool
     {
@@ -30,6 +30,10 @@ class UpdateLinkRequest extends FormRequest
     {
         if ($this->has('url')) {
             $this->merge(['url' => $this->normalizeUrl($this->input('url'))]);
+        }
+
+        if ($this->has('expires_at')) {
+            $this->merge(['expires_at' => $this->normalizeDate($this->input('expires_at'))]);
         }
     }
 

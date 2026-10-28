@@ -54,7 +54,7 @@ class ShortCodeGenerator
         }
 
         // Cualquier ruta de la app cuyo primer segmento coincida con el código.
-        foreach (Route::getRoutes() as $route) {
+        foreach (Route::getRoutes()->getRoutes() as $route) {
             $first = strtolower(explode('/', $route->uri())[0]);
 
             if ($first !== '' && ! str_starts_with($first, '{') && $first === $lower) {

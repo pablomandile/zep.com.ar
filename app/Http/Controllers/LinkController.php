@@ -29,7 +29,12 @@ class LinkController extends Controller
 
     public function store(StoreLinkRequest $request, CreateShortLink $create): RedirectResponse
     {
-        [$link, $created] = $create->handle($request->user(), $request->validated());
+        [$link, $created] = $create->handle(
+            $request->user(),
+            $request->destination(),
+            $request->alias(),
+            $request->expiresAt(),
+        );
 
         Inertia::flash('createdLink', $link->toArray());
         Inertia::flash('toast', [

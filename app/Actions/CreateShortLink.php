@@ -5,8 +5,8 @@ namespace App\Actions;
 use App\Models\Link;
 use App\Models\User;
 use App\Services\ShortCodeGenerator;
+use Carbon\CarbonInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Support\Carbon;
 
 class CreateShortLink
 {
@@ -16,17 +16,14 @@ class CreateShortLink
      * Crea el link corto. Si el usuario ya había acortado la misma URL sin alias
      * ni vencimiento y sigue activa, devuelve esa en vez de crear otra.
      *
-     * @param  array{url: string, alias?: string|null, expires_at?: string|null}  $data
      * @return array{0: Link, 1: bool} el link y si se creó ahora
      */
-    public function handle(User $user, array $data): array
+    public function handle(User $user, string $url, ?string $alias = null, ?CarbonInterface $expiresAt = null): array
     {
-        $alias = $data['alias'] ?? null;
-        $expiresAt = filled($data['expires_at'] ?? null) ? Carbon::parse($data['expires_at']) : null;
 
         if ($alias === null && $expiresAt === null) {
             $existing = $user->links()
-                ->where('url_hash', Link::hashUrl($data['url']))
+                ->where('url_hash', Link::hashUrl($url))
                 ->where('is_custom', false)
                 ->whereNull('expires_at')
                 ->where('is_active', true)
@@ -44,7 +41,7 @@ class CreateShortLink
             try {
                 $link = $user->links()->create([
                     'code' => $alias ?? $this->generator->generate(),
-                    'original_url' => $data['url'],
+                    'original_url' => $url,
                     'is_custom' => $alias !== null,
                     'is_active' => true,
                     'expires_at' => $expiresAt,

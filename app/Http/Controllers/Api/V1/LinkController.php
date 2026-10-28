@@ -35,7 +35,12 @@ class LinkController extends Controller
 
     public function store(StoreLinkRequest $request, CreateShortLink $create): JsonResponse
     {
-        [$link, $created] = $create->handle($request->user(), $request->validated());
+        [$link, $created] = $create->handle(
+            $request->user(),
+            $request->destination(),
+            $request->alias(),
+            $request->expiresAt(),
+        );
 
         return (new LinkResource($link))
             ->response()

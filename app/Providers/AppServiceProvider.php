@@ -41,7 +41,11 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('api', fn (Request $request) => Limit::perMinute(
             (int) config('shortener.rate_limits.api_per_minute'),
-        )->by($request->user()?->currentAccessToken()?->id ?? $request->ip()));
+        )->by(match (true) {
+            $request->bearerToken() !== null => 'token:'.hash('sha256', $request->bearerToken()),
+            $request->user() !== null => 'user:'.$request->user()->id,
+            default => 'ip:'.$request->ip(),
+        }));
     }
 
     /**

@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Concerns\NormalizesUrl;
+use App\Http\Requests\Concerns\NormalizesInput;
 use App\Rules\AllowedDestination;
 use App\Rules\AvailableAlias;
+use Carbon\CarbonInterface;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Http\FormRequest;
  */
 class StoreLinkRequest extends FormRequest
 {
-    use NormalizesUrl;
+    use NormalizesInput;
 
     public function authorize(): bool
     {
@@ -25,6 +26,7 @@ class StoreLinkRequest extends FormRequest
         $this->merge([
             'url' => $this->normalizeUrl($this->input('url')),
             'alias' => filled($this->input('alias')) ? trim((string) $this->input('alias')) : null,
+            'expires_at' => $this->normalizeDate($this->input('expires_at')),
         ]);
     }
 
@@ -44,6 +46,24 @@ class StoreLinkRequest extends FormRequest
             ],
             'expires_at' => ['nullable', 'date', 'after:now'],
         ];
+    }
+
+    /**
+     * URL de destino ya normalizada y validada.
+     */
+    public function destination(): string
+    {
+        return $this->string('url')->value();
+    }
+
+    public function alias(): ?string
+    {
+        return $this->filled('alias') ? $this->string('alias')->value() : null;
+    }
+
+    public function expiresAt(): ?CarbonInterface
+    {
+        return $this->filled('expires_at') ? $this->date('expires_at') : null;
     }
 
     /**

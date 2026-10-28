@@ -13,6 +13,13 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    # El .env.example apunta a MySQL y el runner no lo tiene: el `migrate` de
+    # `composer setup` corre contra SQLite. Los tests ya usan SQLite en memoria
+    # (phpunit.xml).
+    env:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ':memory:'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

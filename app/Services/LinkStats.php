@@ -7,6 +7,7 @@ use App\Models\LinkClick;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class LinkStats
 {
@@ -55,12 +56,16 @@ class LinkStats
      */
     private function top(HasMany $query, string $column, string $nullLabel, int $limit = 10): array
     {
-        return $query->select($column, DB::raw('COUNT(*) as total'))
+        return array_values($query->toBase()
+            ->select($column, DB::raw('COUNT(*) as total'))
             ->groupBy($column)
             ->orderByDesc('total')
             ->limit($limit)
             ->get()
-            ->map(fn ($row) => ['label' => $row->{$column} ?? $nullLabel, 'clicks' => (int) $row->total])
-            ->all();
+            ->map(fn (stdClass $row): array => [
+                'label' => is_string($row->{$column}) ? $row->{$column} : $nullLabel,
+                'clicks' => (int) $row->total,
+            ])
+            ->all());
     }
 }

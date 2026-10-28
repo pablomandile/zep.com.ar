@@ -60,6 +60,20 @@ class ShortenLinkTest extends TestCase
         $this->assertNotNull($link->expires_at);
     }
 
+    public function test_expiration_sent_in_utc_is_stored_in_the_app_timezone()
+    {
+        $user = User::factory()->create();
+        $utc = now('UTC')->addDays(10)->setTime(15, 0);
+
+        $this->actingAs($user)->post(route('links.store'), [
+            'url' => 'https://ejemplo.com',
+            'expires_at' => $utc->toIso8601ZuluString(),
+        ])->assertSessionHasNoErrors();
+
+        // 15:00 UTC son las 12:00 en Buenos Aires: el mismo instante.
+        $this->assertTrue($user->links()->first()->expires_at->equalTo($utc));
+    }
+
     public function test_alias_must_be_free_and_not_reserved()
     {
         $user = User::factory()->create();
