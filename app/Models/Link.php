@@ -37,6 +37,13 @@ class Link extends Model
 
     protected $appends = ['short_url'];
 
+    /**
+     * El default de la columna, para que un link recién creado diga 0 y no null.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = ['clicks_count' => 0];
+
     protected static function booted(): void
     {
         static::saving(function (Link $link) {

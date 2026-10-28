@@ -17,7 +17,7 @@
 - **Estadísticas de clics.** Clics por día, visitantes únicos, de dónde vienen, dispositivos, navegadores, sistemas operativos y países. Los bots y las vistas previas de WhatsApp, Slack y otras apps no se cuentan.
 - **Código QR.** Se genera en el navegador y se descarga en PNG o SVG.
 - **Vencimiento y desactivación.** Un link vencido o desactivado responde con una página de "no disponible" (HTTP 410).
-- **API REST** con tokens personales, para acortar desde otras apps.
+- **API REST privada**, para acortar desde otras apps. Solo el admin crea tokens y solo sus tokens funcionan.
 - **Cuentas con aprobación.** El registro es público (con email o con Google), pero cada cuenta queda pendiente hasta que el admin la aprueba. El admin recibe un mail con cada registro nuevo.
 - **Panel de administración.** Aprobar, rechazar o revocar usuarios, y ver o desactivar cualquier link.
 - **Términos y privacidad.** Hay que aceptarlos al registrarse, y la app los vuelve a pedir si cambia la versión. Están en el marco de la Ley 25.326.
@@ -60,7 +60,9 @@ zep.com.ar/{code}  →  RedirectController  →  302 al destino  (+ registro del
 
 ## API
 
-Los tokens se crean en **Configuración → API**, con permisos `links:read` y/o `links:write`.
+La API **no está abierta a los usuarios**: solo el admin puede crear tokens (en **Configuración → API**, que las demás cuentas no ven) y solo los tokens del admin funcionan. Un token de cualquier otra cuenta recibe `403`. Conviene crear un token por app, con los permisos justos (`links:read` y/o `links:write`), para poder revocarlo sin tocar las demás.
+
+**La especificación completa, con todos los campos, errores y ejemplos, está en [`docs/API.md`](docs/API.md).**
 
 ```http
 Authorization: Bearer TU_TOKEN

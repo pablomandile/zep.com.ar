@@ -13,7 +13,6 @@ Zep lo ofrece Pablo Mandile, desde Argentina. Para cualquier consulta sobre tus 
 - Si entrás con Google: el identificador de tu cuenta de Google y la dirección de tu foto de perfil. No accedemos a tu correo, tus contactos ni nada más de tu cuenta de Google.
 - Si los activás: tus llaves de acceso (passkeys) y la configuración de la autenticación en dos pasos.
 - El estado de tu cuenta (pendiente, aprobada o rechazada), y la fecha y la versión de estos textos que aceptaste.
-- Los tokens de API que crees, guardados cifrados, con su nombre y la fecha en que se usaron por última vez.
 
 **De tus links**
 
@@ -46,20 +45,20 @@ Cada vez que alguien abre un link corto registramos la fecha y la hora, el domin
 ## Cuánto tiempo los guardamos
 
 - Tus datos y tus links se guardan mientras tengas la cuenta.
-- **Si eliminás tu cuenta, se borran en el momento**: tu cuenta, tus links, sus estadísticas y tus tokens de API. No guardamos una copia.
+- **Si eliminás tu cuenta, se borran en el momento**: tu cuenta, tus links y sus estadísticas. No guardamos una copia.
 - Si eliminás un link, deja de funcionar enseguida, pero guardamos el código y su destino para que ese código nunca se reasigne: un link viejo que alguien tenga guardado no tiene que llevar a otro lado. Se borra del todo cuando eliminás tu cuenta.
 - Los clics se guardan mientras exista el link.
 
 ## Tus derechos y cómo ejercerlos
 
-- **Acceso:** en la app ves todos tus links y sus estadísticas, y también podés obtenerlos por la API. Si querés una copia de todo lo que guardamos sobre vos, escribinos a **:contact** y te respondemos dentro de los 10 días corridos.
+- **Acceso:** en la app ves todos tus links y sus estadísticas. Si querés una copia de todo lo que guardamos sobre vos, escribinos a **:contact** y te respondemos dentro de los 10 días corridos.
 - **Rectificación:** cambiá tu nombre y tu email en _Configuración → Perfil_, y el destino de cada link desde _Mis enlaces_.
 - **Supresión:** eliminá tu cuenta desde _Configuración → Perfil → Eliminar cuenta_. Se borra todo en el momento.
 - Para rectificar o suprimir algo que no puedas hacer desde la app, escribinos a **:contact** y lo resolvemos dentro de los 5 días hábiles.
 
 ## Seguridad
 
-La conexión con Zep es cifrada (HTTPS), las contraseñas y los tokens se guardan cifrados de forma irreversible, y podés proteger tu cuenta con autenticación en dos pasos o con llaves de acceso. Ningún sistema es infalible: si detectamos un problema que afecte tus datos, te lo vamos a avisar.
+La conexión con Zep es cifrada (HTTPS), las contraseñas se guardan cifradas de forma irreversible, y podés proteger tu cuenta con autenticación en dos pasos o con llaves de acceso. Ningún sistema es infalible: si detectamos un problema que afecte tus datos, te lo vamos a avisar.
 
 ## Menores
 

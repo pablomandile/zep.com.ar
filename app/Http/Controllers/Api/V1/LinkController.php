@@ -92,6 +92,7 @@ class LinkController extends Controller
      */
     private function find(Request $request, string $code): Link
     {
-        return $request->user()->links()->where('code', $code)->firstOrFail();
+        return $request->user()->links()->where('code', $code)->first()
+            ?? abort(404, 'No tenés ningún link con ese código.');
     }
 }

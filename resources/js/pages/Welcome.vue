@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { BarChart3, Code2, PenLine, QrCode } from '@lucide/vue';
+import { BarChart3, CalendarClock, PenLine, QrCode } from '@lucide/vue';
 import { computed } from 'vue';
 import ZepLogo from '@/components/ZepLogo.vue';
 import { Button } from '@/components/ui/button';
@@ -26,9 +26,9 @@ const features = [
         text: 'Descargalo en PNG o SVG para imprimir o compartir.',
     },
     {
-        icon: Code2,
-        title: 'API',
-        text: 'Acortá links desde tus propias apps con un token.',
+        icon: CalendarClock,
+        title: 'Vencimiento',
+        text: 'Elegí hasta cuándo anda cada link, o pausalo cuando quieras.',
     },
 ];
 </script>

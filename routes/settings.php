@@ -27,7 +27,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('settings/appearance', 'settings/Appearance')->name('appearance.edit');
 });
 
-Route::middleware(['auth', 'verified', 'approved'])->group(function () {
+// La API es solo para el admin: las cuentas comunes acortan desde la web.
+Route::middleware(['auth', 'verified', 'approved', 'admin'])->group(function () {
     Route::get('settings/api-tokens', [ApiTokenController::class, 'index'])->name('api-tokens.index');
     Route::post('settings/api-tokens', [ApiTokenController::class, 'store'])->name('api-tokens.store');
     Route::delete('settings/api-tokens/{token}', [ApiTokenController::class, 'destroy'])->name('api-tokens.destroy');

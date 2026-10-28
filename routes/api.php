@@ -4,7 +4,8 @@ use App\Http\Controllers\Api\V1\LinkController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
-    ->middleware(['auth:sanctum', 'approved', 'throttle:api'])
+    // Solo los tokens del admin: un token de otra cuenta recibe 403.
+    ->middleware(['auth:sanctum', 'approved', 'admin', 'throttle:api'])
     ->name('api.')
     ->group(function () {
         Route::middleware('abilities:links:read')->group(function () {

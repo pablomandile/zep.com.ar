@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -11,7 +12,10 @@ import { edit as editProfile } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
+const page = usePage();
+
+// La API es solo para el admin.
+const sidebarNavItems = computed<NavItem[]>(() => [
     {
         title: 'Perfil',
         href: editProfile(),
@@ -20,15 +24,14 @@ const sidebarNavItems: NavItem[] = [
         title: 'Seguridad',
         href: editSecurity(),
     },
-    {
-        title: 'API',
-        href: apiTokensIndex(),
-    },
+    ...(page.props.auth.user?.is_admin
+        ? [{ title: 'API', href: apiTokensIndex() }]
+        : []),
     {
         title: 'Apariencia',
         href: editAppearance(),
     },
-];
+]);
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
 </script>
