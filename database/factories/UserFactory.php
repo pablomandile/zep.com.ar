@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -33,7 +34,53 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
+            'status' => UserStatus::Approved,
+            'approved_at' => now(),
+            'is_admin' => false,
         ];
+    }
+
+    /**
+     * Cuenta aprobada (es el estado por defecto; existe para que los tests lo expliciten).
+     */
+    public function approved(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => UserStatus::Approved,
+            'approved_at' => now(),
+        ]);
+    }
+
+    /**
+     * Cuenta recién registrada, esperando aprobación.
+     */
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => UserStatus::Pending,
+            'approved_at' => null,
+        ]);
+    }
+
+    /**
+     * Cuenta rechazada o revocada por el admin.
+     */
+    public function rejected(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => UserStatus::Rejected,
+            'approved_at' => null,
+        ]);
+    }
+
+    /**
+     * Administrador.
+     */
+    public function admin(): static
+    {
+        return $this->approved()->state(fn (array $attributes) => [
+            'is_admin' => true,
+        ]);
     }
 
     /**

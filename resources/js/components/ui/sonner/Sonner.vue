@@ -19,6 +19,8 @@ const props = defineProps<ToasterProps>()
       '--border-radius': 'var(--radius)',
     }"
     v-bind="props"
+    :container-aria-label="props.containerAriaLabel ?? 'Notificaciones'"
+    :toast-options="{ closeButtonAriaLabel: 'Cerrar notificación', ...props.toastOptions }"
   >
     <template #success-icon>
       <CircleCheckIcon class="size-4" />
