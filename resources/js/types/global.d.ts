@@ -1,5 +1,7 @@
 import type { Directive } from 'vue';
 import type { Auth } from '@/types/auth';
+import type { ShortLink } from '@/types/links';
+import type { FlashToast } from '@/types/ui';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -20,7 +22,13 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            shortDomain: string;
             [key: string]: unknown;
+        };
+        flashDataType: {
+            toast?: FlashToast;
+            createdLink?: ShortLink;
+            plainToken?: string;
         };
     }
 }

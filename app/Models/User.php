@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -30,6 +31,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property bool $is_admin
  * @property Carbon|null $approved_at
  * @property int|null $approved_by
+ * @property string|null $terms_version
+ * @property Carbon|null $terms_accepted_at
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
  * @property Carbon|null $two_factor_confirmed_at
@@ -58,7 +61,21 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             'status' => UserStatus::class,
             'is_admin' => 'boolean',
             'approved_at' => 'datetime',
+            'terms_accepted_at' => 'datetime',
         ];
+    }
+
+    /**
+     * La privacidad promete que eliminar la cuenta borra todo en el momento.
+     * Links, clics y llaves de acceso caen por FK en cascada; los tokens de API
+     * (polimórficos) y las sesiones de otros dispositivos no tienen FK y se borran acá.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            $user->tokens()->delete();
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+        });
     }
 
     /**
@@ -75,6 +92,22 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function approver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function hasAcceptedCurrentTerms(): bool
+    {
+        return $this->terms_version !== null && $this->terms_version === config('legal.version');
+    }
+
+    /**
+     * Deja constancia de que aceptó la versión vigente de los términos y la privacidad.
+     */
+    public function acceptTerms(): void
+    {
+        $this->forceFill([
+            'terms_version' => config('legal.version'),
+            'terms_accepted_at' => now(),
+        ])->save();
     }
 
     public function isApproved(): bool

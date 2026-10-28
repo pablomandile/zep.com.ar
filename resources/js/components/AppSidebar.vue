@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid } from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -14,15 +13,9 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import { useMainNav } from '@/composables/useMainNav';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Acortar',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const mainNavItems = useMainNav();
 </script>
 
 <template>

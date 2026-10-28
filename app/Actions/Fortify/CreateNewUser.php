@@ -23,6 +23,9 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             ...$this->profileRules(),
             'password' => $this->passwordRules(),
+            'terms' => ['accepted'],
+        ], [
+            'terms.accepted' => 'Para crear la cuenta tenés que aceptar los términos y la política de privacidad.',
         ])->validate();
 
         $user = User::create([
@@ -31,6 +34,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $input['password'],
         ]);
 
+        $user->acceptTerms();
         app(OnboardNewUser::class)->handle($user);
 
         return $user;

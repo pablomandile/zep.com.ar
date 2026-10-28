@@ -8,9 +8,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register } from '@/routes';
+import { privacy, register, terms } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
+import GoogleButton from '@/components/GoogleButton.vue';
 import PasskeyVerify from '@/components/PasskeyVerify.vue';
 
 defineOptions({
@@ -37,6 +38,14 @@ defineProps<{
     </div>
 
     <PasskeyVerify />
+
+    <GoogleButton />
+
+    <div class="flex items-center gap-3 text-xs text-muted-foreground">
+        <span class="h-px flex-1 bg-border" />
+        o con tu email
+        <span class="h-px flex-1 bg-border" />
+    </div>
 
     <Form
         v-bind="store.form()"
@@ -101,6 +110,24 @@ defineProps<{
                 Iniciar sesión
             </Button>
         </div>
+
+        <p class="text-center text-xs text-pretty text-muted-foreground">
+            Si entrás con Google por primera vez, se crea tu cuenta y te vamos a
+            pedir que aceptes los
+            <a
+                :href="terms().url"
+                target="_blank"
+                class="underline underline-offset-4"
+                >términos</a
+            >
+            y la
+            <a
+                :href="privacy().url"
+                target="_blank"
+                class="underline underline-offset-4"
+                >política de privacidad</a
+            >.
+        </p>
 
         <div class="text-center text-sm text-muted-foreground">
             ¿No tenés cuenta?

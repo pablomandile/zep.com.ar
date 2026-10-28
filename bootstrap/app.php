@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureTermsAccepted;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsApproved;
 use App\Http\Middleware\HandleAppearance;
@@ -33,6 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
+            EnsureTermsAccepted::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -31,8 +31,12 @@
         </style>
 
         <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <meta name="theme-color" content="#157a39">
+        <meta name="description" content="Zep: acortá tus URLs. Ve más lejos.">
+        <meta property="og:site_name" content="Zep">
+        <meta property="og:image" content="{{ url('/img/zep-logo.png') }}">
 
         @fonts
 

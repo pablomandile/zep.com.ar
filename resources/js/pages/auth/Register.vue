@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
+import GoogleButton from '@/components/GoogleButton.vue';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { login } from '@/routes';
+import { login, privacy, terms } from '@/routes';
 import { store } from '@/routes/register';
 
 defineProps<{
@@ -24,6 +25,16 @@ defineOptions({
 
 <template>
     <Head title="Registrarse" />
+
+    <div class="mb-6 flex flex-col gap-6">
+        <GoogleButton />
+
+        <div class="flex items-center gap-3 text-xs text-muted-foreground">
+            <span class="h-px flex-1 bg-border" />
+            o con tu email
+            <span class="h-px flex-1 bg-border" />
+        </div>
+    </div>
 
     <Form
         v-bind="store.form()"
@@ -89,10 +100,43 @@ defineOptions({
                 <InputError :message="errors.password_confirmation" />
             </div>
 
+            <div class="grid gap-1">
+                <label
+                    class="flex cursor-pointer items-start gap-3 text-sm text-pretty"
+                >
+                    <input
+                        type="checkbox"
+                        name="terms"
+                        value="1"
+                        required
+                        :tabindex="5"
+                        class="mt-0.5 size-4 shrink-0 accent-primary"
+                        data-test="terms-checkbox"
+                    />
+                    <span
+                        >Leí y acepto los
+                        <a
+                            :href="terms().url"
+                            target="_blank"
+                            class="underline underline-offset-4 hover:text-primary"
+                            >términos y condiciones</a
+                        >
+                        y la
+                        <a
+                            :href="privacy().url"
+                            target="_blank"
+                            class="underline underline-offset-4 hover:text-primary"
+                            >política de privacidad</a
+                        >.</span
+                    >
+                </label>
+                <InputError :message="errors.terms" />
+            </div>
+
             <Button
                 type="submit"
                 class="mt-2 w-full"
-                tabindex="5"
+                tabindex="6"
                 :disabled="processing"
                 data-test="register-user-button"
             >
@@ -106,7 +150,7 @@ defineOptions({
             <TextLink
                 :href="login()"
                 class="underline underline-offset-4"
-                :tabindex="6"
+                :tabindex="7"
                 >Iniciar sesión</TextLink
             >
         </div>

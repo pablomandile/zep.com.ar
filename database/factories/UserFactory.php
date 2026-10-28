@@ -37,7 +37,20 @@ class UserFactory extends Factory
             'status' => UserStatus::Approved,
             'approved_at' => now(),
             'is_admin' => false,
+            'terms_version' => config('legal.version'),
+            'terms_accepted_at' => now(),
         ];
+    }
+
+    /**
+     * Cuenta que todavía no aceptó la versión vigente de los términos.
+     */
+    public function withoutAcceptedTerms(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'terms_version' => null,
+            'terms_accepted_at' => null,
+        ]);
     }
 
     /**

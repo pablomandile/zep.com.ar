@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\RedirectController;
 use Illuminate\Http\Request;
@@ -14,8 +15,13 @@ Route::get('/', function (Request $request) {
         : Inertia::render('Welcome');
 })->name('home');
 
-Route::inertia('terminos', 'legal/Terms')->name('terms');
-Route::inertia('privacidad', 'legal/Privacy')->name('privacy');
+Route::get('terminos', [LegalController::class, 'terms'])->name('terms');
+Route::get('privacidad', [LegalController::class, 'privacy'])->name('privacy');
+
+Route::middleware('auth')->group(function () {
+    Route::get('terminos/aceptar', [LegalController::class, 'accept'])->name('terms.accept');
+    Route::post('terminos/aceptar', [LegalController::class, 'storeAcceptance'])->name('terms.accept.store');
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('auth/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
